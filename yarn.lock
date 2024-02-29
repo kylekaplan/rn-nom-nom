@@ -7635,6 +7635,11 @@ react-native-get-random-values@^1.10.0:
   dependencies:
     fast-base64-decode "^1.0.0"
 
+react-native-otp-entry@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-otp-entry/-/react-native-otp-entry-1.4.1.tgz#037b7398ee999ad94541157ad8b4b5925db7791a"
+  integrity sha512-AAZLgEX1fWcYVE7XVxkHbSbp9VtsUqvzJmC9PzQAEVPENNh9+BT0uTWq7O21hMdMFo3lSugCzyG/H4OR9zR3ug==
+
 react-native-svg@13.4.0:
   version "13.4.0"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-13.4.0.tgz#82399ba0956c454144618aa581e2d748dd3f010a"

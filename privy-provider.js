@@ -1,6 +1,6 @@
 import React from 'react'
 import {PrivyProvider as Provider} from '@privy-io/expo';
-import {base} from 'viem/chains';
+import { base } from 'viem/chains';
 
 export function PrivyProvider({ children }) {
   return (

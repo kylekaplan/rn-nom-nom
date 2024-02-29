@@ -1,4 +1,4 @@
-import { TextInput as RNTextInput, ViewStyle } from 'react-native'
+import { TextInput as RNTextInput, ViewStyle, StyleSheet } from 'react-native'
 import { ComponentProps } from 'react'
 
 type GlueTextInputProps = ComponentProps<typeof RNTextInput>;
@@ -12,9 +12,16 @@ export const TextInput = (props: TextInputProps) => {
   const { style, ...rest } = props;
   return (
     <RNTextInput
-      style={[style]}
+      style={[styles.textInput, style]}
       placeholderTextColor='#919191'
       {...rest}
     />
   )
 };
+
+// create stylesheet
+const styles = StyleSheet.create({
+  textInput: {
+    width: '100%',
+  },
+});

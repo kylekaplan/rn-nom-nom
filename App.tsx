@@ -85,7 +85,7 @@ function App() {
     checkWallet()
   }, [wallet])
 
-  if (!isReady) return <Text></Text>
+  if (!isReady) return <ActivityIndicator />
 
   async function checkWallet() {
     try {
@@ -239,7 +239,8 @@ function App() {
           <TextInput
             onChangeText={setAmount}
             placeholder="$0"
-            placeholderTextColor={'rgba(255, 255, 255, .6)'}
+            // placeholderTextColor={'rgba(0, 0, 0, .6)'}
+            placeholderTextColor={'rgba(0, 0, 0, .6)'}
             value={amount ? amount.toString() : null}
             style={styles.inputAmount}
           />
@@ -251,7 +252,7 @@ function App() {
             <InputField
               onChangeText={setToAddress}
               placeholder="Recipient"
-              placeholderTextColor={'rgba(255, 255, 255, .6)'}
+              placeholderTextColor={'rgba(0, 0, 0, .6)'}
               value={toAddress}
               autoCapitalize="none"
               autoCorrect={false}

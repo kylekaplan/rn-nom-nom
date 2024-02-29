@@ -15,7 +15,12 @@ export const Input = (props: InputProps) => {
 
   return (
     <View style={styles.input}>
-      <GlueInput style={[styles.input, style]} {...rest}>
+      <GlueInput
+        style={[styles.input, style]} 
+        variant="rounded"
+        size="md"
+        {...rest}
+      >
         {icon && (
           <InputSlot pl="$3" pr="$3">
             <InputIcon as={icon} />
@@ -29,11 +34,6 @@ export const Input = (props: InputProps) => {
 
 const styles = StyleSheet.create({
   input: {
-    color: '#919191',
-    borderColor:'#919191',
-    borderRadius: 44,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    overflow: 'hidden',
+    // color: '#919191'
   },
 });

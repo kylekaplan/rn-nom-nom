@@ -16,7 +16,7 @@ export const Logo = ({ style }: LogoProps) => {
 
 const styles = StyleSheet.create({
   logo: {
-    width: 170,
-    height: 170,
+    width: 180,
+    height: 180,
   },
 });
