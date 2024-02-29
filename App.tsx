@@ -3,7 +3,6 @@ import '@ethersproject/shims'
 
 import { useEffect, useState } from 'react'
 import { TextInput, Image, StyleSheet, Text, View, ActivityIndicator } from 'react-native'
-import { PrivyProvider } from './privy-provider'
 import {
   Button,
   ButtonText,
@@ -13,15 +12,15 @@ import {
   VStack,
   Toast,
   ToastTitle,
-  ToastDescription
+  ToastDescription,
+  GluestackUIProvider,
 } from '@gluestack-ui/themed'
-import { GluestackUIProvider } from './gluestack-provider'
 import {
   useEmbeddedWallet,
   isNotCreated,
   usePrivy,
   useLoginWithEmail,
-  useLoginWithOAuth
+  useLoginWithOAuth,
 } from '@privy-io/expo';
 import { LinearGradient } from 'expo-linear-gradient'
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -34,11 +33,11 @@ import { createSmartAccountClient } from "@biconomy/account"
 import ABI from './abi.json'
 import { ChainId } from "@biconomy/core-types";
 import { LogBox } from "react-native";
+import { PrivyProvider } from './privy-provider'
+import Login from './src/screens/Login'
+import { config } from '@gluestack-ui/config'
 
 LogBox.ignoreLogs(['Possible unhandled promise rejection'])
-
-const Monk = require('./monk.png')
-
 
 const graphqlQuery = handle => ({
   query: `
@@ -69,11 +68,10 @@ const graphqlQuery = handle => ({
   }
 )
 
+
 function App() {
   const {isReady, user, logout} = usePrivy() as any
   const wallet = useEmbeddedWallet()
-  const {sendCode} = useLoginWithEmail()
-  const {login} = useLoginWithOAuth()
   const toast = useToast()
   const [amount, setAmount] = useState<any>(0)
   const [ownerAddress, setOwnerAddress] = useState('')
@@ -289,39 +287,10 @@ function App() {
     )
   }
 
-  function renderLoginView() {
-    return (
-      <>
-        <View>
-          <Image
-            source={Monk}
-            style={styles.logo}
-          />
-        </View>
-        <Button
-          style={styles.googleButton}
-          onPress={() => login({provider: 'google'})}
-        >
-          <Ionicons name="logo-google" size={16} color="white" />
-          <ButtonText style={styles.googleButtonText}>Sign in with Google</ButtonText>
-        </Button>
-        <Button
-          style={styles.emailButton}
-          onPress={() => sendCode({
-            email: 'dabit3@gmail.com'
-          })}
-        >
-          <Ionicons name="mail" size={16} color="white" />
-          <ButtonText style={styles.emailButtonText}>Sign in with email</ButtonText>
-        </Button>
-      </>
-    )
-  }
-
 
   return (
     <LinearGradient
-      colors={['#6c08af', '#8234a0']}
+      colors={['#FFFFFF', '#FFFFFF']}
       style={styles.container}
     >
       {
@@ -344,7 +313,7 @@ function App() {
       }
       {
        !user && (
-          renderLoginView()
+          <Login />
         )
       }
     </LinearGradient>
@@ -375,28 +344,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     borderRadius: 44, marginTop: 20, width: 300, height: 50},
   logoutButton: { borderRadius: 44, width: 300, marginTop: 10, height: 50 },
-  logo: {
-    width: 140, height: 140, marginBottom: 30
-  },
-  googleButton: {
-    borderRadius: 44,
-    width: 300,
-    backgroundColor: '#000000',
-    height: 50
-  },
-  googleButtonText: {marginLeft: 10},
-  emailButton: {
-    borderRadius: 44, width: 300, marginTop: 10,
-    backgroundColor: '#000000',
-    height: 50
-  },
-  emailButtonText: {marginLeft: 10},
   createWalletButtonText: {marginLeft: 10},
 });
 
 export default function Main() {
   return (
-  <GluestackUIProvider>
+    <GluestackUIProvider config={config}>
     <PrivyProvider>
     <App />
     </PrivyProvider>
