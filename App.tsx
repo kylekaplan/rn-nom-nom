@@ -1,8 +1,8 @@
-import 'react-native-get-random-values'
-import '@ethersproject/shims'
+import 'react-native-get-random-values';
+import '@ethersproject/shims';
 
-import { useEffect, useState } from 'react'
-import { TextInput, Image, StyleSheet, Text, View, ActivityIndicator } from 'react-native'
+import { useEffect, useState } from 'react';
+import { TextInput, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import {
   Button,
   ButtonText,
@@ -14,7 +14,7 @@ import {
   ToastTitle,
   ToastDescription,
   GluestackUIProvider,
-} from '@gluestack-ui/themed'
+} from '@gluestack-ui/themed';
 import {
   useEmbeddedWallet,
   isNotCreated,
@@ -22,22 +22,23 @@ import {
   useLoginWithEmail,
   useLoginWithOAuth,
 } from '@privy-io/expo';
-import { LinearGradient } from 'expo-linear-gradient'
-import Ionicons from '@expo/vector-icons/Ionicons'
+import { LinearGradient } from 'expo-linear-gradient';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import {
   encodeFunctionData, createWalletClient, createPublicClient, http, custom, parseEther, parseGwei
-} from 'viem'
-import { base, mainnet } from 'viem/chains'
-import { normalize } from 'viem/ens'
-import { createSmartAccountClient } from "@biconomy/account"
-import ABI from './abi.json'
+} from 'viem';
+import { base, mainnet } from 'viem/chains';
+import { normalize } from 'viem/ens';
+import { createSmartAccountClient } from "@biconomy/account";
+import ABI from './abi.json';
 import { ChainId } from "@biconomy/core-types";
 import { LogBox } from "react-native";
-import { PrivyProvider } from './privy-provider'
-import Login from './src/screens/Login'
-import { config } from '@gluestack-ui/config'
+import { PrivyProvider } from './privy-provider';
+import Login from './src/screens/Login';
+import { config } from '@gluestack-ui/config';
+import { Home } from './src/screens/Home';
 
-LogBox.ignoreLogs(['Possible unhandled promise rejection'])
+LogBox.ignoreLogs(['Possible unhandled promise rejection']);
 
 const graphqlQuery = handle => ({
   query: `
@@ -70,7 +71,7 @@ const graphqlQuery = handle => ({
 
 
 function App() {
-  const {isReady, user, logout} = usePrivy() as any
+  const {isReady, user, logout} = usePrivy() as any;
   const wallet = useEmbeddedWallet()
   const toast = useToast()
   const [amount, setAmount] = useState<any>(0)
@@ -229,63 +230,63 @@ function App() {
   }
 
   function renderUserView() {
-    return (
-      <View style={{
-        justifyContent: 'center',
-        flex: 1
-      }}>
-        <Text style={styles.welcomeText}>Welcome, {user?.linked_accounts[0].name}</Text>
-        <View>
-          <TextInput
-            onChangeText={setAmount}
-            placeholder="$0"
-            // placeholderTextColor={'rgba(0, 0, 0, .6)'}
-            placeholderTextColor={'rgba(0, 0, 0, .6)'}
-            value={amount ? amount.toString() : null}
-            style={styles.inputAmount}
-          />
-          <Input
-            style={styles.recipientInput}
-            variant="outline"
-            size="md"
-          >
-            <InputField
-              onChangeText={setToAddress}
-              placeholder="Recipient"
-              placeholderTextColor={'rgba(0, 0, 0, .6)'}
-              value={toAddress}
-              autoCapitalize="none"
-              autoCorrect={false}
-              style={styles.recipientInputField}
-            />
-          </Input>
-          <Button
-            style={styles.sendButton}
-            onPress={() => send()}
-          >
-            {
-              !sending && (
-                <Ionicons name="caret-forward-outline" size={22} color="white" />
-              )
-            }
-            {
-              sending && (
-                <ActivityIndicator size="small" color="white" />
-              )
-            }
-            <ButtonText style={{marginLeft: 10, fontSize: 18}}>Send</ButtonText>
-          </Button>
-        </View>
-        <Button
-          action="secondary"
-          style={styles.logoutButton}
-          onPress={() => logout()}
-        >
-          <Ionicons name="log-out" size={22} color="white" />
-          <ButtonText style={{fontSize: 18, marginLeft: 10}}>Logout</ButtonText>
-        </Button>
-      </View>
-    )
+    return null;
+    // return (
+    //   <View style={{
+    //     justifyContent: 'center',
+    //     flex: 1
+    //   }}>
+    //     <Text style={styles.welcomeText}>Welcome, {user?.linked_accounts[0].name}</Text>
+    //     <View>
+    //       <TextInput
+    //         onChangeText={setAmount}
+    //         placeholder="$0"
+    //         placeholderTextColor={'rgba(0, 0, 0, .6)'}
+    //         value={amount ? amount.toString() : null}
+    //         style={styles.inputAmount}
+    //       />
+    //       <Input
+    //         style={styles.recipientInput}
+    //         variant="outline"
+    //         size="md"
+    //       >
+    //         <InputField
+    //           onChangeText={setToAddress}
+    //           placeholder="Recipient"
+    //           placeholderTextColor={'rgba(0, 0, 0, .6)'}
+    //           value={toAddress}
+    //           autoCapitalize="none"
+    //           autoCorrect={false}
+    //           style={styles.recipientInputField}
+    //         />
+    //       </Input>
+    //       <Button
+    //         style={styles.sendButton}
+    //         onPress={() => send()}
+    //       >
+    //         {
+    //           !sending && (
+    //             <Ionicons name="caret-forward-outline" size={22} color="white" />
+    //           )
+    //         }
+    //         {
+    //           sending && (
+    //             <ActivityIndicator size="small" color="white" />
+    //           )
+    //         }
+    //         <ButtonText style={{marginLeft: 10, fontSize: 18}}>Send</ButtonText>
+    //       </Button>
+    //     </View>
+    //     <Button
+    //       action="secondary"
+    //       style={styles.logoutButton}
+    //       onPress={() => logout()}
+    //     >
+    //       <Ionicons name="log-out" size={22} color="white" />
+    //       <ButtonText style={{fontSize: 18, marginLeft: 10}}>Logout</ButtonText>
+    //     </Button>
+    //   </View>
+    // )
   }
 
 
@@ -309,7 +310,7 @@ function App() {
       }
       {
         hasWallet && user && (
-          renderUserView()
+          <Home />
         )
       }
       {
@@ -326,25 +327,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: ''
+    width: '100%',
   },
-  inputAmount: {
-    textAlign: 'center',
-    marginTop: 20,
-    fontSize: 110,
-    color: 'rgba(255, 255, 255, .8)'
-  },
-  welcomeText: {
-    fontSize: 18, color: 'white', textAlign: 'center'},
-  recipientInput: { marginTop: 20, borderWidth: 0 },
-  recipientInputField: {
-    textAlign: 'center',
-    fontSize: 28, color: 'rgba(255, 255, 255, .8)'
-  },
-  sendButton: {
-    backgroundColor: '#000',
-    borderRadius: 44, marginTop: 20, width: 300, height: 50},
-  logoutButton: { borderRadius: 44, width: 300, marginTop: 10, height: 50 },
   createWalletButtonText: {marginLeft: 10},
 });
 
