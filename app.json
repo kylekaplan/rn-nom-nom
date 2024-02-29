@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "rnapp",
+    "scheme": "nomnom",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,9 +17,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.rnaa.app"
+      "bundleIdentifier": "com.nomnom.app"
     },
     "android": {
+      "package": "com.nomnom.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
