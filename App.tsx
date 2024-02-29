@@ -1,8 +1,9 @@
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
 
+import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { TextInput, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, Image, StyleSheet, ActivityIndicator, View } from 'react-native';
 import {
   Button,
   ButtonText,
@@ -37,6 +38,7 @@ import { PrivyProvider } from './privy-provider';
 import Login from './src/screens/Login';
 import { config } from '@gluestack-ui/config';
 import { Home } from './src/screens/Home';
+import { MainTabs } from './src/components/tabs/Tabs';
 
 LogBox.ignoreLogs(['Possible unhandled promise rejection']);
 
@@ -310,7 +312,9 @@ function App() {
       }
       {
         hasWallet && user && (
-          <Home />
+          <View style={{ flex: 1, width: '100%' }}>
+            <MainTabs />
+          </View>
         )
       }
       {
@@ -335,9 +339,11 @@ const styles = StyleSheet.create({
 export default function Main() {
   return (
     <GluestackUIProvider config={config}>
-    <PrivyProvider>
-    <App />
-    </PrivyProvider>
-  </GluestackUIProvider>
+      <PrivyProvider>
+        <NavigationContainer>
+          <App />
+        </NavigationContainer>
+      </PrivyProvider>
+    </GluestackUIProvider>
   )
 }

@@ -7,12 +7,11 @@ import {
   InputField,
   Text,
 } from '@gluestack-ui/themed';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { usePrivy } from '@privy-io/expo';
 import { ProductCard } from '../components/card/ProductCard';
 
 export const Home = () => {
-  const {isReady, user, logout} = usePrivy() as any;
+  const {isReady, user } = usePrivy() as any;
   const [amount, setAmount] = useState<any>(0);
   const [toAddress, setToAddress] = useState('');
   const [sending, setSending] = useState(false);
@@ -27,14 +26,6 @@ export const Home = () => {
       <View>
         <ProductCard />
       </View>
-      <Button
-        action="secondary"
-        style={styles.logoutButton}
-        onPress={() => logout()}
-      >
-        <Ionicons name="log-out" size={22} color="white" />
-        <ButtonText style={{fontSize: 18, marginLeft: 10}}>Logout</ButtonText>
-      </Button>
     </View>
   )
 };
@@ -64,12 +55,6 @@ const styles = StyleSheet.create({
   },
   recipientInputField: {
     textAlign: 'center',
-    fontSize: 28, color: 'rgba(255, 255, 255, .8)'
-  },
-  logoutButton: {
-    borderRadius: 44,
-    width: 300,
-    marginTop: 10,
-    height: 50,
+    fontSize: 28, color: 'rgba(0, 0, 0, .8)'
   },
 });
