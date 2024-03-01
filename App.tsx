@@ -30,8 +30,8 @@ import {
 } from 'viem';
 import { base, mainnet } from 'viem/chains';
 import { normalize } from 'viem/ens';
-import { createSmartAccountClient } from "@biconomy/account";
-import ABI from './abi.json';
+import { BiconomySmartAccountV2, createSmartAccountClient } from "@biconomy/account";
+// import ABI from './abi.json';
 import { ChainId } from "@biconomy/core-types";
 import { LogBox } from "react-native";
 import { PrivyProvider } from './privy-provider';
@@ -39,6 +39,7 @@ import Login from './src/screens/Login';
 import { config } from '@gluestack-ui/config';
 import { Home } from './src/screens/Home';
 import { MainTabs } from './src/components/tabs/Tabs';
+import { XmtpProvider } from 'xmtp-react-native-sdk';
 
 LogBox.ignoreLogs(['Possible unhandled promise rejection']);
 
@@ -81,6 +82,7 @@ function App() {
   const [toAddress, setToAddress] = useState('')
   const [sending, setSending] = useState(false)
   const hasWallet = !isNotCreated(wallet)
+  const [smartAccount, setSmartAccount] = useState<BiconomySmartAccountV2 | null>(null);
 
   console.log('ownerAddress: ', ownerAddress)
 
@@ -106,7 +108,8 @@ function App() {
     }
   }
 
-  async function send() {
+  async function getSmartWallet() {
+    if (smartAccount) return;
     try {
       if (!wallet || wallet.status !== 'connected') return
       setSending(true)
@@ -120,175 +123,19 @@ function App() {
         })
       })
 
-      let _toAddress:any = toAddress
-      if (_toAddress.includes('.eth')) {
-        const publicClient = createPublicClient({
-          chain: mainnet,
-          transport: http(),
-        })
-        const ensAddress = await publicClient.getEnsAddress({
-          name: normalize(_toAddress), 
-        })
-        if (ensAddress) {
-          _toAddress = ensAddress
-        }
-      }
-      if (_toAddress.includes('.lens') || _toAddress.includes('lens/')) {
-        const response = await fetch('https://api.airstack.xyz/graphql', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': process.env.EXPO_PUBLIC_AIRSTACK_KEY || '', // Include this if your API request requires authentication
-          },
-          body: JSON.stringify(graphqlQuery(_toAddress))
-        }).then(res => res.json())
-        console.log('response: ', response) 
-        if (response.data && response.data.Socials) {
-          _toAddress = response.data.Socials.Social[response.data.Socials.Social.length - 1].userAssociatedAddresses[0]
-        }
-      }
-      console.log('toAddress: ', _toAddress)
-
-      // const hash = await client.sendTransaction({
-      //   account: ownerAddress as `0x${string}`,
-      //   to: _toAddress,
-      //   value: parseEther(amount.toString())
+      // const smartAccount = await createSmartAccountClient({
+      //   signer: client as any,
+      //   bundlerUrl: process.env.EXPO_PUBLIC_BUNDLER_URL || '',
+      //   biconomyPaymasterApiKey: process.env.EXPO_PUBLIC_PAYMASTER_KEY,
+      //   chainId: ChainId.BASE_MAINNET
       // })
-      // console.log('hash: ', hash)
-      // setAmount(0)
-      // setToAddress('')
-      // toast.show({
-      //   placement: "top",
-      //   render: ({ id }) => {
-      //     const toastId = "toast-" + id
-      //     return (
-      //       <Toast
-      //       nativeID={toastId}
-      //       action="attention"
-      //       variant="solid">
-      //         <VStack space="xs">
-      //           <ToastTitle>Congratulations</ToastTitle>
-      //           <ToastDescription>
-      //            {`Transaction sent to ${_toAddress} successfully!`}
-      //           </ToastDescription>
-      //         </VStack>
-      //       </Toast>
-      //     )
-      //   },
-      // })
-      // setSending(false)
-
-      const smartAccount = await createSmartAccountClient({
-        signer: client as any,
-        bundlerUrl: process.env.EXPO_PUBLIC_BUNDLER_URL || '',
-        biconomyPaymasterApiKey: process.env.EXPO_PUBLIC_PAYMASTER_KEY,
-        chainId: ChainId.BASE_MAINNET
-      })
-      const address = await smartAccount.getAccountAddress()
-      console.log('smart account address: ', address)
-      const _amount = (amount / 1000)
-      
-      const encodedCall = encodeFunctionData({
-        abi: ABI,
-        functionName: "transfer",
-        args: [_toAddress, parseGwei(_amount.toString())],
-      })
-
-      const transactionResponse = await smartAccount.sendTransaction({
-        // USDC on Base contract
-        to: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        data: encodedCall,
-      });
-
-      const { transactionHash } = await transactionResponse.waitForTxHash()
-      console.log('transactionHash: ', transactionHash)
-
-      setAmount(0)
-      toast.show({
-        placement: "top",
-        render: ({ id }) => {
-          const toastId = "toast-" + id
-          return (
-            <Toast
-            nativeID={toastId}
-            action="attention"
-            variant="solid">
-              <VStack space="xs">
-                <ToastTitle>Congratulations</ToastTitle>
-                <ToastDescription>
-                 {`Payment sent to ${toAddress} successfully!`}
-                </ToastDescription>
-              </VStack>
-            </Toast>
-          )
-        },
-      })
-      setSending(false)
-      setToAddress('')
+      // setSmartAccount(client);
+      // const address = await smartAccount.getAccountAddress()
+      // console.log('smart account address: ', address)
     } catch (err) {
       console.log('error: ', err)
       setSending(false)
     }
-  }
-
-  function renderUserView() {
-    return null;
-    // return (
-    //   <View style={{
-    //     justifyContent: 'center',
-    //     flex: 1
-    //   }}>
-    //     <Text style={styles.welcomeText}>Welcome, {user?.linked_accounts[0].name}</Text>
-    //     <View>
-    //       <TextInput
-    //         onChangeText={setAmount}
-    //         placeholder="$0"
-    //         placeholderTextColor={'rgba(0, 0, 0, .6)'}
-    //         value={amount ? amount.toString() : null}
-    //         style={styles.inputAmount}
-    //       />
-    //       <Input
-    //         style={styles.recipientInput}
-    //         variant="outline"
-    //         size="md"
-    //       >
-    //         <InputField
-    //           onChangeText={setToAddress}
-    //           placeholder="Recipient"
-    //           placeholderTextColor={'rgba(0, 0, 0, .6)'}
-    //           value={toAddress}
-    //           autoCapitalize="none"
-    //           autoCorrect={false}
-    //           style={styles.recipientInputField}
-    //         />
-    //       </Input>
-    //       <Button
-    //         style={styles.sendButton}
-    //         onPress={() => send()}
-    //       >
-    //         {
-    //           !sending && (
-    //             <Ionicons name="caret-forward-outline" size={22} color="white" />
-    //           )
-    //         }
-    //         {
-    //           sending && (
-    //             <ActivityIndicator size="small" color="white" />
-    //           )
-    //         }
-    //         <ButtonText style={{marginLeft: 10, fontSize: 18}}>Send</ButtonText>
-    //       </Button>
-    //     </View>
-    //     <Button
-    //       action="secondary"
-    //       style={styles.logoutButton}
-    //       onPress={() => logout()}
-    //     >
-    //       <Ionicons name="log-out" size={22} color="white" />
-    //       <ButtonText style={{fontSize: 18, marginLeft: 10}}>Logout</ButtonText>
-    //     </Button>
-    //   </View>
-    // )
   }
 
 
@@ -313,7 +160,7 @@ function App() {
       {
         hasWallet && user && (
           <View style={{ flex: 1, width: '100%' }}>
-            <MainTabs />
+            <MainTabs smartAccount={smartAccount} />
           </View>
         )
       }
@@ -341,7 +188,9 @@ export default function Main() {
     <GluestackUIProvider config={config}>
       <PrivyProvider>
         <NavigationContainer>
-          <App />
+          <XmtpProvider>
+            <App />
+          </XmtpProvider>
         </NavigationContainer>
       </PrivyProvider>
     </GluestackUIProvider>

@@ -6,7 +6,7 @@ import { Inbox } from '../../screens/Inbox';
 
 const Tab = createBottomTabNavigator();
 
-export const MainTabs = () => {
+export const MainTabs = ({ smartAccount }) => {
   return (
     // <View style={{ backgroundColor: 'black' }}>
     <Tab.Navigator

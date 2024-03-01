@@ -2,6 +2,14 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "paths": {
+      // "xmtp-react-native-sdk": ["../src/index"],
+      // "xmtp-react-native-sdk/*": ["../src/*"],
+      "xmtp-react-native-sdk": ["../xmtp-react-native/src/index"],
+      "xmtp-react-native-sdk/*": ["../xmtp-react-native/src/*"],
+      // "react": ["./node_modules/@types/react"]
+    },
+    "jsx": "react-native",
   }
 }
